@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp_flutter/pages/weather_list_cell.dart';
 
 class DetailPage extends StatelessWidget {
   static const List<String> weatherData = [
@@ -17,7 +18,12 @@ class DetailPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            const Text('北海道'),
+            const Text(
+              '北海道',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
             const Text('2024年5月13日'),
             const Text('降水確率'),
             Padding(
@@ -32,18 +38,19 @@ class DetailPage extends StatelessWidget {
               child: ListView.separated(
                 itemCount: weatherData.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(weatherData[index]),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const DetailPage(),
-                        ),
-                      );
-                    },
-                  );
+                  return const WeatherListCell();
+                  // return ListTile(
+                  //   title: Text(weatherData[index]),
+                  //   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const DetailPage(),
+                  //       ),
+                  //     );
+                  //   },
+                  // );
                 },
                 separatorBuilder: (context, index) => const Divider(),
               ),
