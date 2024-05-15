@@ -89,16 +89,13 @@ class _WeatherListCell extends StatelessWidget {
       child: Row(
         children: [
           Text(time),
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            width: 50,
-            height: 50,
-            child: Image.asset('assets/images/splash_logo.png'),
-          ),
-          const SizedBox(
-            width: 10,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: Image.asset('assets/images/splash_logo.png'),
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
