@@ -41,7 +41,7 @@ class DetailPage extends StatelessWidget {
                   return StickyHeader(
                     header: Container(
                       height: 30.0,
-                      color: Color.fromARGB(249, 244, 244, 244),
+                      color: const Color.fromARGB(249, 244, 244, 244),
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       alignment: Alignment.centerLeft,
                       child: Text(
