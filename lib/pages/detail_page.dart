@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 import 'package:weatherapp_flutter/pages/weather_list_cell.dart';
 
 class DetailPage extends StatelessWidget {
-  static const List<String> weatherData = [
-    '天気情報を表示',
-    '天気情報を表示',
-    '天気情報を表示',
-    '天気情報を表示',
-    '天気情報を表示'
-  ];
-  const DetailPage({super.key});
+  final Map<String, List<String>> weather = const {
+    '5月10日': ['天気情報1', '天気情報2'],
+    '5月11日': ['天気情報3', '天気情報4', '天気情報5', '天気情報6', '天気情報7'],
+  };
+  final String prefecture;
+  const DetailPage({required this.prefecture, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +17,9 @@ class DetailPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            const Text(
-              '北海道',
-              style: TextStyle(
+            Text(
+              prefecture,
+              style: const TextStyle(
                 fontSize: 20,
               ),
             ),
@@ -35,24 +34,28 @@ class DetailPage extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.separated(
-                itemCount: weatherData.length,
+              child: ListView.builder(
+                itemCount: weather.length,
                 itemBuilder: (context, index) {
-                  return const WeatherListCell();
-                  // return ListTile(
-                  //   title: Text(weatherData[index]),
-                  //   contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const DetailPage(),
-                  //       ),
-                  //     );
-                  //   },
-                  // );
+                  String date = weather.keys.elementAt(index);
+                  List<String> dailyEvents = weather[date]!;
+                  return StickyHeader(
+                    header: Container(
+                      height: 30.0,
+                      color: Color.fromARGB(249, 244, 244, 244),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        date,
+                      ),
+                    ),
+                    content: Column(
+                      children: dailyEvents
+                          .map((event) => WeatherListCell())
+                          .toList(),
+                    ),
+                  );
                 },
-                separatorBuilder: (context, index) => const Divider(),
               ),
             ),
           ],

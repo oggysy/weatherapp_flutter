@@ -72,7 +72,8 @@ class PrefectureSelectPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const DetailPage(),
+                  builder: (context) =>
+                      DetailPage(prefecture: prefectures[index]),
                   fullscreenDialog: true,
                 ),
               );
