@@ -32,6 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_native_splash: ^2.4.0
+  gap: ^3.0.1
   sticky_headers: ^0.3.0+2
 
 flutter_native_splash:
