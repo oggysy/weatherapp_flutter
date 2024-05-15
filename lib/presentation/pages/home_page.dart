@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weatherapp_flutter/pages/prefecture_select_page.dart';
+import 'package:weatherapp_flutter/presentation/pages/prefecture_select_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

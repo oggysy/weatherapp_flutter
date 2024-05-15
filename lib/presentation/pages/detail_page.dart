@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:weatherapp_flutter/pages/weather_list_cell.dart';
+import 'package:weatherapp_flutter/presentation/pages/weather_list_cell.dart';
 
 class DetailPage extends StatelessWidget {
   final Map<String, List<String>> weather = const {
