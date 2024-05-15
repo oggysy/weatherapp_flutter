@@ -50,7 +50,12 @@ class DetailPage extends StatelessWidget {
                     ),
                     content: Column(
                       children: dailyEvents
-                          .map((event) => const _WeatherListCell())
+                          .map((event) => const _WeatherListCell(
+                              maxTemperature: '25.0',
+                              minTemperature: '10.0',
+                              humidityLevel: '50',
+                              imageName: 'rain',
+                              time: '18:00'))
                           .toList(),
                     ),
                   );
@@ -65,7 +70,17 @@ class DetailPage extends StatelessWidget {
 }
 
 class _WeatherListCell extends StatelessWidget {
-  const _WeatherListCell();
+  final String time;
+  final String imageName;
+  final String maxTemperature;
+  final String minTemperature;
+  final String humidityLevel;
+  const _WeatherListCell(
+      {required this.maxTemperature,
+      required this.minTemperature,
+      required this.humidityLevel,
+      required this.imageName,
+      required this.time});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +88,7 @@ class _WeatherListCell extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          const Text('18:00'),
+          Text(time),
           const SizedBox(
             width: 10,
           ),
@@ -85,30 +100,30 @@ class _WeatherListCell extends StatelessWidget {
           const SizedBox(
             width: 10,
           ),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '最高気温:',
-                style: TextStyle(
+                '最高気温:$maxTemperature ℃',
+                style: const TextStyle(
                   color: Colors.red,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Text(
-                '最低気温:',
-                style: TextStyle(
+                '最低気温:$minTemperature ℃',
+                style: const TextStyle(
                   color: Colors.blue,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Text(
-                '湿度:',
-                style: TextStyle(
+                '湿度:$humidityLevel %',
+                style: const TextStyle(
                   color: Colors.green,
                 ),
               ),
