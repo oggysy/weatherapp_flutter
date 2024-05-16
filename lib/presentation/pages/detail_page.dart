@@ -49,7 +49,7 @@ class DetailPage extends StatelessWidget {
                 itemCount: weather.length,
                 itemBuilder: (context, index) {
                   String date = weather.keys.elementAt(index);
-                  List<String> dailyEvents = weather[date]!;
+                  List<String> dailyEvents = weather[date] ?? [];
                   return StickyHeader(
                     header: Container(
                       height: 30.0,
