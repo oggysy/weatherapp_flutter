@@ -3,11 +3,23 @@ import 'package:sticky_headers/sticky_headers.dart';
 
 class DetailPage extends StatelessWidget {
   final Map<String, List<String>> weather = const {
-    '5月10日': ['天気情報1', '天気情報2'],
-    '5月11日': ['天気情報3', '天気情報4', '天気情報5', '天気情報6', '天気情報7'],
+    '5月10日': [
+      '天気情報1',
+      '天気情報2',
+    ],
+    '5月11日': [
+      '天気情報3',
+      '天気情報4',
+      '天気情報5',
+      '天気情報6',
+      '天気情報7',
+    ],
   };
   final String prefecture;
-  const DetailPage({required this.prefecture, super.key});
+  const DetailPage({
+    required this.prefecture,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
