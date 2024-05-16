@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp_flutter/presentation/pages/prefecture_select_page.dart';
+import 'package:weatherapp_flutter/service/location_service.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final LocationService _locationService = LocationService();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,11 @@ class HomePage extends StatelessWidget {
               height: 20,
             ),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () async {
+                var position = await _locationService.getCurrentLocation();
+                print(position?.latitude);
+                print(position?.longitude);
+              },
               icon: const Icon(Icons.near_me),
               label: const Text('現在地を取得'),
               style: ElevatedButton.styleFrom(
