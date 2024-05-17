@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
 class DetailPage extends StatefulWidget {
   final String prefecture;
+  final WeathreAPIService service;
   const DetailPage({
     required this.prefecture,
+    this.service = WeathreAPIService.instance,
     super.key,
   });
 
@@ -13,6 +16,16 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  @override
+  void initState() {
+    fetchWeathre();
+    super.initState();
+  }
+
+  void fetchWeathre() async {
+    widget.service.fetchWeatherFromCity(city: widget.prefecture);
+  }
+
   final Map<String, List<String>> weather = const {
     '5月10日': [
       '天気情報1',

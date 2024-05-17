@@ -27,7 +27,7 @@ class WeathreAPIService {
       });
       if (response.statusCode == 200) {
         final data = WeatherResponse.fromJson(response.data);
-        print(data);
+        print(data.toString());
         return data;
       } else {
         throw Exception('Failed to load weather data');
