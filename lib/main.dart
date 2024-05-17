@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp_flutter/presentation/pages/home_page.dart';
-import 'package:weatherapp_flutter/service/location_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: HomePage(
-        locationService: LocationService(),
-      ),
+      home: HomePage(),
     );
   }
 }
