@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
             ),
             ElevatedButton.icon(
               onPressed: () async {
-                var position = await locationService.getCurrentLocation();
+                final position = await locationService.getCurrentLocation();
                 print(position?.latitude);
                 print(position?.longitude);
               },
