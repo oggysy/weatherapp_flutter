@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
+  final String prefecture;
+  const DetailPage({
+    required this.prefecture,
+    super.key,
+  });
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
   final Map<String, List<String>> weather = const {
     '5月10日': [
       '天気情報1',
@@ -15,11 +26,6 @@ class DetailPage extends StatelessWidget {
       '天気情報7',
     ],
   };
-  final String prefecture;
-  const DetailPage({
-    required this.prefecture,
-    super.key,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,7 @@ class DetailPage extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              prefecture,
+              widget.prefecture,
               style: const TextStyle(
                 fontSize: 20,
               ),
