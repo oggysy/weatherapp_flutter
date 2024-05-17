@@ -3,7 +3,7 @@ import 'package:weatherapp_flutter/presentation/pages/prefecture_select_page.dar
 import 'package:weatherapp_flutter/service/location_service.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key}) : locationService = LocationService();
+  const HomePage({super.key, this.locationService = LocationService.instance});
 
   final LocationService locationService;
 
