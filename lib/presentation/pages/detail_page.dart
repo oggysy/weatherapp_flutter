@@ -5,11 +5,10 @@ import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 class DetailPage extends StatefulWidget {
   final String prefecture;
   final WeathreAPIService service;
-  const DetailPage({
+  DetailPage({
     required this.prefecture,
-    this.service = WeathreAPIService.instance,
     super.key,
-  });
+  }) : service = WeathreAPIService.instance;
 
   @override
   State<DetailPage> createState() => _DetailPageState();

@@ -2,13 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:weatherapp_flutter/model/weather_response_data_model.dart';
 
 class WeathreAPIService {
-  static const WeathreAPIService instance = WeathreAPIService._internal();
+  static final WeathreAPIService instance =
+      WeathreAPIService._internal(dio: Dio());
 
-  const WeathreAPIService._internal();
-  factory WeathreAPIService() {
-    return instance;
-  }
+  const WeathreAPIService._internal({required this.dio});
 
+  final Dio dio;
   final String _baseUrl = "https://api.openweathermap.org/data/2.5/forecast?r";
   final String _apiKey = "5dfc577c1d7d94e9e23a00431582f1ac";
   final String _units = 'metric';
