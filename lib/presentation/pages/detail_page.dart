@@ -23,7 +23,7 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   void _fetchWeathre() async {
-    widget.service.fetchWeatherFromCity(city: widget.prefecture);
+    await widget.service.fetchWeatherFromCity(city: widget.prefecture);
   }
 
   final Map<String, List<String>> weather = const {
