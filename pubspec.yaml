@@ -29,11 +29,15 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.6
+  dio: ^5.4.3+1
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.1.0
   flutter_native_splash: ^2.4.0
+  freezed_annotation: ^2.4.1
   gap: ^3.0.1
   geolocator: ^12.0.0
+  json_annotation: ^4.9.0
   sticky_headers: ^0.3.0+2
 
 flutter_native_splash:
@@ -41,9 +45,12 @@ flutter_native_splash:
   color: '#ffffff'
 
 dev_dependencies:
+  build_runner: ^2.4.9
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -57,6 +64,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - 'assets/images/'
+    - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

@@ -1,7 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
+  final String prefecture;
+  final WeathreAPIService service;
+  DetailPage({
+    required this.prefecture,
+    super.key,
+  }) : service = WeathreAPIService.instance;
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  @override
+  void initState() {
+    _fetchWeathre();
+    super.initState();
+  }
+
+  void _fetchWeathre() async {
+    await widget.service.fetchWeatherFromCity(city: widget.prefecture);
+  }
+
   final Map<String, List<String>> weather = const {
     '5月10日': [
       '天気情報1',
@@ -15,11 +38,6 @@ class DetailPage extends StatelessWidget {
       '天気情報7',
     ],
   };
-  final String prefecture;
-  const DetailPage({
-    required this.prefecture,
-    super.key,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +47,7 @@ class DetailPage extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              prefecture,
+              widget.prefecture,
               style: const TextStyle(
                 fontSize: 20,
               ),
