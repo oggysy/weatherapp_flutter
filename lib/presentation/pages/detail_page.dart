@@ -18,11 +18,11 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
-    fetchWeathre();
+    _fetchWeathre();
     super.initState();
   }
 
-  void fetchWeathre() async {
+  void _fetchWeathre() async {
     widget.service.fetchWeatherFromCity(city: widget.prefecture);
   }
 
