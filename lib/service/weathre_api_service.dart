@@ -18,13 +18,16 @@ class WeathreAPIService {
   Future<WeatherResponse> fetchWeatherFromCity({required String city}) async {
     final dio = Dio();
     try {
-      final response = await dio.get(_baseUrl, queryParameters: {
-        'q': city,
-        'appid': _apiKey,
-        'count': _count,
-        'units': _units,
-        'lang': _lang,
-      });
+      final response = await dio.get(
+        _baseUrl,
+        queryParameters: {
+          'q': city,
+          'appid': _apiKey,
+          'count': _count,
+          'units': _units,
+          'lang': _lang,
+        },
+      );
       if (response.statusCode == 200) {
         final data = WeatherResponse.fromJson(response.data);
         print(data.toString());
