@@ -3,26 +3,24 @@ import 'package:weatherapp_flutter/model/weather_response_data_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class WeathreAPIService {
-  static final WeathreAPIService instance =
-      WeathreAPIService._internal(dio: Dio());
+  static const WeathreAPIService instance = WeathreAPIService._internal();
 
-  WeathreAPIService._internal({required this.dio});
+  const WeathreAPIService._internal();
 
-  final Dio dio;
   final String _baseUrl = "https://api.openweathermap.org/data/2.5/forecast?r";
-  final String _apiKey = dotenv.get('API_KEY');
   final String _units = 'metric';
   final String _count = '8';
   final String _lang = 'ja';
 
   Future<WeatherResponse> fetchWeatherFromCity({required String city}) async {
     final dio = Dio();
+    final String apiKey = dotenv.get('API_KEY');
     try {
       final response = await dio.get(
         _baseUrl,
         queryParameters: {
           'q': city,
-          'appid': _apiKey,
+          'appid': apiKey,
           'count': _count,
           'units': _units,
           'lang': _lang,
