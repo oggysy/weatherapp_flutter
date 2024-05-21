@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:weatherapp_flutter/extension/weather_response_extension.dart';
 import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
@@ -28,7 +29,7 @@ class _DetailPageState extends State<DetailPage> {
     final data =
         await widget.service.fetchWeatherFromCity(city: widget.prefecture);
     setState(() {
-      timePopData = data.extractTimeAndPop();
+      timePopData = data.timeAndPopList;
     });
   }
 
