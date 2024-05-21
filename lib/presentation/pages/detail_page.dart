@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
@@ -16,6 +17,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final currentDate = DateFormat('y年M月d日').format(DateTime.now());
   @override
   void initState() {
     _fetchWeathre();
@@ -58,7 +60,7 @@ class _DetailPageState extends State<DetailPage> {
                 fontSize: 20,
               ),
             ),
-            const Text('2024年5月13日'),
+            Text(currentDate),
             const Text('降水確率'),
             Padding(
               padding: const EdgeInsets.all(8.0),
