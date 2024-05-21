@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
+import 'package:weatherapp_flutter/extension/int_extension.dart';
 part 'weather_response_data_model.freezed.dart';
 part 'weather_response_data_model.g.dart';
 
@@ -18,8 +18,7 @@ class WeatherResponse with _$WeatherResponse {
 
   List<Map<String, int>> extractTimeAndPop() {
     return list.map((data) {
-      DateTime date = DateTime.fromMillisecondsSinceEpoch(data.dt * 1000);
-      String time = DateFormat('HH:mm').format(date);
+      String time = data.dt.toHourMinuteString();
       int popPercent = (data.pop * 100).toInt();
       return {time: popPercent};
     }).toList();
@@ -28,8 +27,7 @@ class WeatherResponse with _$WeatherResponse {
   Map<String, List<WeatherData>> groupByDate() {
     Map<String, List<WeatherData>> grouped = {};
     for (var data in list) {
-      String formattedDate = DateFormat('MM月dd日')
-          .format(DateTime.fromMillisecondsSinceEpoch(data.dt * 1000));
+      String formattedDate = data.dt.toMonthDayString();
       if (!grouped.containsKey(formattedDate)) {
         grouped[formattedDate] = [];
       }
