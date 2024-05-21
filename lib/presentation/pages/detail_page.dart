@@ -71,6 +71,7 @@ class _DetailPageState extends State<DetailPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: PopChart(
+                    key: ValueKey(timePopData.hashCode),
                     timePopData: timePopData,
                   ),
                 ),
