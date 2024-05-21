@@ -31,6 +31,7 @@ class _DetailPageState extends State<DetailPage> {
     final data =
         await widget.service.fetchWeatherFromCity(city: widget.prefecture);
     setState(() {
+      weather = data.groupByDate();
       timePopData = data.timeAndPopList;
     });
   }
