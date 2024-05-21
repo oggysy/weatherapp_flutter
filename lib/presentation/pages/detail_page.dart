@@ -96,7 +96,7 @@ class _DetailPageState extends State<DetailPage> {
                                   minTemperature:
                                       event.main.temp_min.toStringAsFixed(1),
                                   humidityLevel: event.main.humidity.toString(),
-                                  imageName: 'rain',
+                                  imageName: event.weather.first.icon,
                                   time: event.dt.toHourMinuteString(),
                                 ),
                               ))
@@ -135,10 +135,16 @@ class _WeatherListCell extends StatelessWidget {
           Text(time),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SizedBox(
+            child: Image.network(
               width: 50,
               height: 50,
-              child: Image.asset('assets/images/splash_logo.png'),
+              'https://openweathermap.org/img/wn/$imageName.png',
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                );
+              },
             ),
           ),
           Column(
