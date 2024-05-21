@@ -15,7 +15,7 @@ extension WeatherResponseExtension on WeatherResponse {
   Map<String, List<WeatherData>> groupByDate() {
     Map<String, List<WeatherData>> grouped = {};
     for (var data in list) {
-      String formattedDate = data.dt.toMonthDayString();
+      String formattedDate = data.dt.toStringMMDDFromEpoch();
       if (!grouped.containsKey(formattedDate)) {
         grouped[formattedDate] = [];
       }

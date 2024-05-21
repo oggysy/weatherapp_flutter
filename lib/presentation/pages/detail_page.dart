@@ -99,7 +99,7 @@ class _DetailPageState extends State<DetailPage> {
                                       event.main.temp_min.toStringAsFixed(1),
                                   humidityLevel: event.main.humidity.toString(),
                                   imageName: event.weather.first.icon,
-                                  time: event.dt.toHourMinuteString(),
+                                  time: event.dt.toStringHHMMFromEpoch(),
                                 ),
                               ))
                           .toList(),

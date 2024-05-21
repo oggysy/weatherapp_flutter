@@ -1,13 +1,13 @@
-import 'package:intl/intl.dart';
+import 'package:weatherapp_flutter/extension/date_time_extension.dart';
 
 extension TimeStampExtension on int {
-  String toHourMinuteString() {
+  String toStringHHMMFromEpoch() {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
-    return DateFormat('HH:mm').format(date);
+    return date.dateAsStringHHMM;
   }
 
-  String toMonthDayString() {
+  String toStringMMDDFromEpoch() {
     DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
-    return DateFormat('MM月dd日').format(date);
+    return date.dateAsStringMMDD;
   }
 }
