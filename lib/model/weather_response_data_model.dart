@@ -7,7 +7,6 @@ part 'weather_response_data_model.g.dart';
 
 @freezed
 class WeatherResponse with _$WeatherResponse {
-  const WeatherResponse._();
   const factory WeatherResponse({
     required List<WeatherData> list,
     required City city,
@@ -18,22 +17,11 @@ class WeatherResponse with _$WeatherResponse {
 
   List<Map<String, int>> extractTimeAndPop() {
     return list.map((data) {
-      String time = data.dt.toHourMinuteString();
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(data.dt * 1000);
+      String time = DateFormat('HH:mm').format(date);
       int popPercent = (data.pop * 100).toInt();
       return {time: popPercent};
     }).toList();
-  }
-
-  Map<String, List<WeatherData>> groupByDate() {
-    Map<String, List<WeatherData>> grouped = {};
-    for (var data in list) {
-      String formattedDate = data.dt.toMonthDayString();
-      if (!grouped.containsKey(formattedDate)) {
-        grouped[formattedDate] = [];
-      }
-      grouped[formattedDate]?.add(data);
-    }
-    return grouped;
   }
 }
 

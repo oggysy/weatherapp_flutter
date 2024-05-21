@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:weatherapp_flutter/extension/date_time_extension.dart';
+import 'package:weatherapp_flutter/extension/weather_response_extension.dart';
 import 'package:weatherapp_flutter/extension/int_extension.dart';
 import 'package:weatherapp_flutter/model/weather_response_data_model.dart';
 import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
@@ -19,7 +20,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final currentDate = DateFormat('y年M月d日').format(DateTime.now());
+  final String currentDate = DateTime.now().dateAsStringYMD;
   @override
   void initState() {
     _fetchWeathre();
@@ -30,7 +31,6 @@ class _DetailPageState extends State<DetailPage> {
     final data =
         await widget.service.fetchWeatherFromCity(city: widget.prefecture);
     setState(() {
-      weather = data.groupByDate();
       timePopData = data.extractTimeAndPop();
     });
   }
@@ -61,6 +61,7 @@ class _DetailPageState extends State<DetailPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: PopChart(
+                    key: ValueKey(timePopData.hashCode),
                     timePopData: timePopData,
                   ),
                 ),

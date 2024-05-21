@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class PopChart extends StatelessWidget {
+class PopChart extends StatefulWidget {
   const PopChart({
     super.key,
     required this.timePopData,
@@ -10,14 +10,28 @@ class PopChart extends StatelessWidget {
   final List<Map<String, int>> timePopData;
 
   @override
-  Widget build(BuildContext context) {
-    List<FlSpot> spots = [];
-    for (var i = 0; i < timePopData.length; i++) {
+  State<PopChart> createState() => _PopChartState();
+}
+
+class _PopChartState extends State<PopChart> {
+  List<FlSpot> spots = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _setupSpots();
+  }
+
+  void _setupSpots() {
+    for (var i = 0; i < widget.timePopData.length; i++) {
       double x = i.toDouble();
-      double y = timePopData[i].values.first.toDouble();
+      double y = widget.timePopData[i].values.first.toDouble();
       spots.add(FlSpot(x, y));
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return LineChart(
       LineChartData(
         lineBarsData: [
@@ -32,15 +46,15 @@ class PopChart extends StatelessWidget {
               interval: 1,
               getTitlesWidget: (double value, TitleMeta meta) {
                 final index = value.toInt();
-                if (index >= 0 && index < timePopData.length) {
+                if (index >= 0 && index < widget.timePopData.length) {
                   return Text(
-                    timePopData[index].keys.first,
+                    widget.timePopData[index].keys.first,
                     style: const TextStyle(
                       fontSize: 10,
                     ),
                   );
                 }
-                return const Text('');
+                return Container();
               },
             ),
           ),
