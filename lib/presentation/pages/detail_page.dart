@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
 class DetailPage extends StatefulWidget {
@@ -22,9 +23,14 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   void _fetchWeathre() async {
-    await widget.service.fetchWeatherFromCity(city: widget.prefecture);
+    final data =
+        await widget.service.fetchWeatherFromCity(city: widget.prefecture);
+    setState(() {
+      timePopData = data.extractTimeAndPop();
+    });
   }
 
+  List<Map<String, int>> timePopData = [];
   final Map<String, List<String>> weather = const {
     '5月10日': [
       '天気情報1',
@@ -56,10 +62,15 @@ class _DetailPageState extends State<DetailPage> {
             const Text('降水確率'),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
+              child: SizedBox(
                 width: double.infinity, // 幅
                 height: 200.0, // 高さ
-                color: Colors.black, // 背景色
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PopChart(
+                    timePopData: timePopData,
+                  ),
+                ),
               ),
             ),
             Expanded(
