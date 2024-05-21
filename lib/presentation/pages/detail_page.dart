@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:weatherapp_flutter/extension/date_time_extension.dart';
 import 'package:weatherapp_flutter/extension/weather_response_extension.dart';
 import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
@@ -18,7 +18,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final currentDate = DateFormat('y年M月d日').format(DateTime.now());
+  final String currentDate = DateTime.now().formattedDate;
   @override
   void initState() {
     _fetchWeathre();
