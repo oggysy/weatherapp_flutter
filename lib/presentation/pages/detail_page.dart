@@ -18,7 +18,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final String currentDate = DateTime.now().formattedDate;
+  final String currentDate = DateTime.now().dateAsStringYMD;
   @override
   void initState() {
     _fetchWeathre();
