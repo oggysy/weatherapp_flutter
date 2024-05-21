@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import 'package:weatherapp_flutter/extension/int_extension.dart';
+import 'package:weatherapp_flutter/model/weather_response_data_model.dart';
 import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
@@ -28,24 +30,13 @@ class _DetailPageState extends State<DetailPage> {
     final data =
         await widget.service.fetchWeatherFromCity(city: widget.prefecture);
     setState(() {
+      weather = data.groupByDate();
       timePopData = data.extractTimeAndPop();
     });
   }
 
   List<Map<String, int>> timePopData = [];
-  final Map<String, List<String>> weather = const {
-    '5月10日': [
-      '天気情報1',
-      '天気情報2',
-    ],
-    '5月11日': [
-      '天気情報3',
-      '天気情報4',
-      '天気情報5',
-      '天気情報6',
-      '天気情報7',
-    ],
-  };
+  Map<String, List<WeatherData>> weather = {};
 
   @override
   Widget build(BuildContext context) {
@@ -80,25 +71,35 @@ class _DetailPageState extends State<DetailPage> {
                 itemCount: weather.length,
                 itemBuilder: (context, index) {
                   String date = weather.keys.elementAt(index);
-                  List<String> dailyEvents = weather[date] ?? [];
+                  List<WeatherData> threeHourWethers = weather[date] ?? [];
                   return StickyHeader(
                     header: Container(
                       height: 30.0,
                       color: const Color.fromARGB(249, 244, 244, 244),
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                      ),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         date,
                       ),
                     ),
                     content: Column(
-                      children: dailyEvents
-                          .map((event) => const _WeatherListCell(
-                              maxTemperature: '25.0',
-                              minTemperature: '10.0',
-                              humidityLevel: '50',
-                              imageName: 'rain',
-                              time: '18:00'))
+                      children: threeHourWethers
+                          .map((event) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                child: _WeatherListCell(
+                                  maxTemperature:
+                                      event.main.temp_max.toStringAsFixed(1),
+                                  minTemperature:
+                                      event.main.temp_min.toStringAsFixed(1),
+                                  humidityLevel: event.main.humidity.toString(),
+                                  imageName: 'rain',
+                                  time: event.dt.toHourMinuteString(),
+                                ),
+                              ))
                           .toList(),
                     ),
                   );
