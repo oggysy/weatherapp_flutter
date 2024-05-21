@@ -24,6 +24,19 @@ class WeatherResponse with _$WeatherResponse {
       return {time: popPercent};
     }).toList();
   }
+
+  Map<String, List<WeatherData>> groupByDate() {
+    Map<String, List<WeatherData>> grouped = {};
+    for (var data in list) {
+      String formattedDate = DateFormat('MM月dd日')
+          .format(DateTime.fromMillisecondsSinceEpoch(data.dt * 1000));
+      if (!grouped.containsKey(formattedDate)) {
+        grouped[formattedDate] = [];
+      }
+      grouped[formattedDate]?.add(data);
+    }
+    return grouped;
+  }
 }
 
 @freezed
