@@ -1,13 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
 part 'weather_response_data_model.freezed.dart';
 part 'weather_response_data_model.g.dart';
 
 @freezed
 class WeatherResponse with _$WeatherResponse {
-  const WeatherResponse._();
   const factory WeatherResponse({
     required List<WeatherData> list,
     required City city,
@@ -15,15 +13,6 @@ class WeatherResponse with _$WeatherResponse {
 
   factory WeatherResponse.fromJson(Map<String, dynamic> json) =>
       _$WeatherResponseFromJson(json);
-
-  List<Map<String, int>> extractTimeAndPop() {
-    return list.map((data) {
-      DateTime date = DateTime.fromMillisecondsSinceEpoch(data.dt * 1000);
-      String time = DateFormat('HH:mm').format(date);
-      int popPercent = (data.pop * 100).toInt();
-      return {time: popPercent};
-    }).toList();
-  }
 }
 
 @freezed

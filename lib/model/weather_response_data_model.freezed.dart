@@ -120,11 +120,10 @@ class __$$WeatherResponseImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$WeatherResponseImpl extends _WeatherResponse {
+class _$WeatherResponseImpl implements _WeatherResponse {
   const _$WeatherResponseImpl(
       {required final List<WeatherData> list, required this.city})
-      : _list = list,
-        super._();
+      : _list = list;
 
   factory _$WeatherResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$WeatherResponseImplFromJson(json);
@@ -174,11 +173,10 @@ class _$WeatherResponseImpl extends _WeatherResponse {
   }
 }
 
-abstract class _WeatherResponse extends WeatherResponse {
+abstract class _WeatherResponse implements WeatherResponse {
   const factory _WeatherResponse(
       {required final List<WeatherData> list,
       required final City city}) = _$WeatherResponseImpl;
-  const _WeatherResponse._() : super._();
 
   factory _WeatherResponse.fromJson(Map<String, dynamic> json) =
       _$WeatherResponseImpl.fromJson;
