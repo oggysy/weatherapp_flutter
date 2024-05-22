@@ -21,6 +21,8 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   final String currentDate = DateTime.now().dateAsStringYMD;
+  List<Map<String, int>> timePopData = [];
+
   @override
   void initState() {
     _fetchWeathre();
@@ -36,7 +38,6 @@ class _DetailPageState extends State<DetailPage> {
     });
   }
 
-  List<Map<String, int>> timePopData = [];
   Map<String, List<WeatherData>> weather = {};
 
   @override
