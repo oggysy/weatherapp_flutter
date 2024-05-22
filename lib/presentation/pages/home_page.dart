@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp_flutter/presentation/pages/detail_page.dart';
 import 'package:weatherapp_flutter/presentation/pages/prefecture_select_page.dart';
 import 'package:weatherapp_flutter/service/location_service.dart';
 
@@ -29,7 +30,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PrefectureSelectPage()));
+                        builder: (context) => const PrefectureSelectPage()));
               },
               icon: const Icon(Icons.format_list_bulleted),
               label: const Text('都道府県を選択'),
@@ -47,10 +48,20 @@ class HomePage extends StatelessWidget {
               height: 20,
             ),
             ElevatedButton.icon(
-              onPressed: () async {
-                final position = await locationService.getCurrentLocation();
-                print(position?.latitude);
-                print(position?.longitude);
+              onPressed: () {
+                locationService.getCurrentLocation().then(
+                  (position) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          lat: position?.latitude,
+                          lon: position?.longitude,
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
               icon: const Icon(Icons.near_me),
               label: const Text('現在地を取得'),
