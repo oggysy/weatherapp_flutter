@@ -21,14 +21,13 @@ class WeathreAPIService {
         queryParameters: {
           'q': city,
           'appid': apiKey,
-          'count': _count,
+          'cnt': _count,
           'units': _units,
           'lang': _lang,
         },
       );
       if (response.statusCode == 200) {
         final data = WeatherResponse.fromJson(response.data);
-        print(data.toString());
         return data;
       } else {
         throw Exception('Failed to load weather data');
