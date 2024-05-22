@@ -12,19 +12,19 @@ class WeathreAPIService {
   final String _count = '8';
   final String _lang = 'ja';
 
-  Future<WeatherResponse> fetchWeatherFromCity({required String city}) async {
+  Future<WeatherResponse> _fetchWeatherData(
+      Map<String, dynamic> queryParameters) async {
     final dio = Dio();
     final String apiKey = dotenv.get('API_KEY');
+    queryParameters['appid'] = apiKey;
+    queryParameters['cnt'] = _count;
+    queryParameters['units'] = _units;
+    queryParameters['lang'] = _lang;
+
     try {
       final response = await dio.get(
         _baseUrl,
-        queryParameters: {
-          'q': city,
-          'appid': apiKey,
-          'cnt': _count,
-          'units': _units,
-          'lang': _lang,
-        },
+        queryParameters: queryParameters,
       );
       if (response.statusCode == 200) {
         final data = WeatherResponse.fromJson(response.data);
@@ -36,5 +36,14 @@ class WeathreAPIService {
       print(e.toString());
       throw Exception('Error fetching weather data: $e');
     }
+  }
+
+  Future<WeatherResponse> fetchWeatherFromCity({required String city}) {
+    return _fetchWeatherData({'q': city});
+  }
+
+  Future<WeatherResponse> fetchWeatherFromLocation(
+      {required double lat, required double lon}) {
+    return _fetchWeatherData({'lat': lat, 'lon': lon});
   }
 }
