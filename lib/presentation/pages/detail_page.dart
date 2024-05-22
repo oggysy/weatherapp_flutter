@@ -18,8 +18,10 @@ class DetailPage extends StatefulWidget {
     this.lat,
     this.lon,
   })  : service = WeathreAPIService.instance,
-        assert((prefecture != null && lat == null && lon == null) ||
-            (prefecture == null && lat != null && lon != null));
+        assert(
+          (prefecture != null && lat == null && lon == null) ||
+              (prefecture == null && lat != null && lon != null),
+        );
 
   @override
   State<DetailPage> createState() => _DetailPageState();
