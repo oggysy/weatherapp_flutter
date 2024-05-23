@@ -8,12 +8,20 @@ import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
 class DetailPage extends StatefulWidget {
-  final String prefecture;
+  final String? prefecture;
+  final double? lat;
+  final double? lon;
   final WeathreAPIService service;
   const DetailPage({
-    required this.prefecture,
+    this.prefecture,
     super.key,
-  }) : service = WeathreAPIService.instance;
+    this.lat,
+    this.lon,
+  })  : service = WeathreAPIService.instance,
+        assert(
+          (prefecture != null && lat == null && lon == null) ||
+              (prefecture == null && lat != null && lon != null),
+        );
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -23,6 +31,7 @@ class _DetailPageState extends State<DetailPage> {
   final String currentDate = DateTime.now().dateAsStringYMD;
   List<Map<String, int>> timePopData = [];
   Map<String, List<WeatherData>> weather = {};
+  String city = '';
 
   @override
   void initState() {
@@ -31,12 +40,24 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   void _fetchWeathre() async {
-    final data =
-        await widget.service.fetchWeatherFromCity(city: widget.prefecture);
-    setState(() {
-      weather = data.groupByDate();
-      timePopData = data.timeAndPopList;
-    });
+    WeatherResponse data;
+    if (widget.prefecture != null) {
+      data =
+          await widget.service.fetchWeatherFromCity(city: widget.prefecture!);
+    } else if (widget.lat != null && widget.lon != null) {
+      data = await widget.service
+          .fetchWeatherFromLocation(lat: widget.lat!, lon: widget.lon!);
+    } else {
+      throw Exception('Invalid parameters');
+    }
+
+    setState(
+      () {
+        city = data.city.name;
+        weather = data.groupByDate();
+        timePopData = data.timeAndPopList;
+      },
+    );
   }
 
   @override
@@ -47,7 +68,7 @@ class _DetailPageState extends State<DetailPage> {
         child: Column(
           children: [
             Text(
-              widget.prefecture,
+              city,
               style: const TextStyle(
                 fontSize: 20,
               ),
