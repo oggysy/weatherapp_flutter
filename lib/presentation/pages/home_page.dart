@@ -81,24 +81,22 @@ class _HomePageState extends State<HomePage> {
               height: 20,
             ),
             ElevatedButton.icon(
-              onPressed: () {
-                widget.locationService.getCurrentLocation().then(
-                  (position) {
-                    if (position == null) {
-                      _showPermissionDeniedDialog();
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailPage(
-                            lat: position.latitude,
-                            lon: position.longitude,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                );
+              onPressed: () async {
+                final position =
+                    await widget.locationService.getCurrentLocation();
+                if (!context.mounted) return;
+
+                if (position != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailPage(
+                        lat: position.latitude,
+                        lon: position.longitude,
+                      ),
+                    ),
+                  );
+                }
               },
               icon: const Icon(Icons.near_me),
               label: const Text('現在地を取得'),
