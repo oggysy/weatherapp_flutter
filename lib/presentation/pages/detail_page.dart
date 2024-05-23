@@ -86,7 +86,7 @@ class _DetailPageState extends State<DetailPage> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _showErrorDialog(message: message);
             });
-            return Center(child: Text('エラー: ${snapshot.error}'));
+            return Container();
           } else if (!snapshot.hasData) {
             return const Center(child: Text('データがありません'));
           } else {
