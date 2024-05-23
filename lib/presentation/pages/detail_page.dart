@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:weatherapp_flutter/extension/date_time_extension.dart';
 import 'package:weatherapp_flutter/extension/weather_response_extension.dart';
+import 'package:weatherapp_flutter/extension/int_extension.dart';
+import 'package:weatherapp_flutter/model/weather_response_data_model.dart';
 import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
@@ -20,6 +22,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   final String currentDate = DateTime.now().dateAsStringYMD;
   List<Map<String, int>> timePopData = [];
+  Map<String, List<WeatherData>> weather = {};
 
   @override
   void initState() {
@@ -31,23 +34,10 @@ class _DetailPageState extends State<DetailPage> {
     final data =
         await widget.service.fetchWeatherFromCity(city: widget.prefecture);
     setState(() {
+      weather = data.groupByDate();
       timePopData = data.timeAndPopList;
     });
   }
-
-  final Map<String, List<String>> weather = const {
-    '5月10日': [
-      '天気情報1',
-      '天気情報2',
-    ],
-    '5月11日': [
-      '天気情報3',
-      '天気情報4',
-      '天気情報5',
-      '天気情報6',
-      '天気情報7',
-    ],
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +73,35 @@ class _DetailPageState extends State<DetailPage> {
                 itemCount: weather.length,
                 itemBuilder: (context, index) {
                   String date = weather.keys.elementAt(index);
-                  List<String> dailyEvents = weather[date] ?? [];
+                  List<WeatherData> threeHourWethers = weather[date] ?? [];
                   return StickyHeader(
                     header: Container(
                       height: 30.0,
                       color: const Color.fromARGB(249, 244, 244, 244),
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                      ),
                       alignment: Alignment.centerLeft,
                       child: Text(
                         date,
                       ),
                     ),
                     content: Column(
-                      children: dailyEvents
-                          .map((event) => const _WeatherListCell(
-                              maxTemperature: '25.0',
-                              minTemperature: '10.0',
-                              humidityLevel: '50',
-                              imageName: 'rain',
-                              time: '18:00'))
+                      children: threeHourWethers
+                          .map((event) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                child: _WeatherListCell(
+                                  maxTemperature:
+                                      event.main.temp_max.toStringAsFixed(1),
+                                  minTemperature:
+                                      event.main.temp_min.toStringAsFixed(1),
+                                  humidityLevel: event.main.humidity.toString(),
+                                  imageName: event.weather.first.icon,
+                                  time: event.dt.toStringHHMMFromEpoch(),
+                                ),
+                              ))
                           .toList(),
                     ),
                   );
@@ -137,10 +137,16 @@ class _WeatherListCell extends StatelessWidget {
           Text(time),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SizedBox(
+            child: Image.network(
               width: 50,
               height: 50,
-              child: Image.asset('assets/images/splash_logo.png'),
+              'https://openweathermap.org/img/wn/$imageName.png',
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                );
+              },
             ),
           ),
           Column(
