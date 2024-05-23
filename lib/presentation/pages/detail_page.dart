@@ -29,108 +29,118 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   final String currentDate = DateTime.now().dateAsStringYMD;
-  List<Map<String, int>> timePopData = [];
-  Map<String, List<WeatherData>> weather = {};
+  late Future<WeatherResponse> weatherDataFuture;
   String city = '';
 
   @override
   void initState() {
-    _fetchWeathre();
+    weatherDataFuture = _fetchWeather();
     super.initState();
   }
 
-  void _fetchWeathre() async {
-    WeatherResponse data;
+  Future<WeatherResponse> _fetchWeather() async {
     if (widget.prefecture != null) {
-      data =
-          await widget.service.fetchWeatherFromCity(city: widget.prefecture!);
+      return await widget.service
+          .fetchWeatherFromCity(city: widget.prefecture!);
     } else if (widget.lat != null && widget.lon != null) {
-      data = await widget.service
+      return await widget.service
           .fetchWeatherFromLocation(lat: widget.lat!, lon: widget.lon!);
     } else {
       throw Exception('Invalid parameters');
     }
-
-    setState(
-      () {
-        city = data.city.name;
-        weather = data.groupByDate();
-        timePopData = data.timeAndPopList;
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            Text(
-              city,
-              style: const TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            Text(currentDate),
-            const Text('降水確率'),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: double.infinity, // 幅
-                height: 200.0, // 高さ
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: PopChart(
-                    key: ValueKey(timePopData.hashCode),
-                    timePopData: timePopData,
+      body: FutureBuilder<WeatherResponse>(
+        future: weatherDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return const Center(child: Text('No data available'));
+          } else {
+            final data = snapshot.data!;
+            city = data.city.name;
+            final weather = data.groupByDate();
+            final timePopData = data.timeAndPopList;
+
+            return Center(
+              child: Column(
+                children: [
+                  Text(
+                    city,
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: weather.length,
-                itemBuilder: (context, index) {
-                  String date = weather.keys.elementAt(index);
-                  List<WeatherData> threeHourWethers = weather[date] ?? [];
-                  return StickyHeader(
-                    header: Container(
-                      height: 30.0,
-                      color: const Color.fromARGB(249, 244, 244, 244),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                      ),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        date,
+                  Text(currentDate),
+                  const Text('降水確率'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.infinity, // 幅
+                      height: 200.0, // 高さ
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PopChart(
+                          key: ValueKey(timePopData.hashCode),
+                          timePopData: timePopData,
+                        ),
                       ),
                     ),
-                    content: Column(
-                      children: threeHourWethers
-                          .map((event) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 10,
-                                ),
-                                child: _WeatherListCell(
-                                  maxTemperature:
-                                      event.main.temp_max.toStringAsFixed(1),
-                                  minTemperature:
-                                      event.main.temp_min.toStringAsFixed(1),
-                                  humidityLevel: event.main.humidity.toString(),
-                                  imageName: event.weather.first.icon,
-                                  time: event.dt.toStringHHMMFromEpoch(),
-                                ),
-                              ))
-                          .toList(),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: weather.length,
+                      itemBuilder: (context, index) {
+                        String date = weather.keys.elementAt(index);
+                        List<WeatherData> threeHourWethers =
+                            weather[date] ?? [];
+                        return StickyHeader(
+                          header: Container(
+                            height: 30.0,
+                            color: const Color.fromARGB(249, 244, 244, 244),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              date,
+                            ),
+                          ),
+                          content: Column(
+                            children: threeHourWethers
+                                .map((event) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 10,
+                                      ),
+                                      child: _WeatherListCell(
+                                        maxTemperature: event.main.temp_max
+                                            .toStringAsFixed(1),
+                                        minTemperature: event.main.temp_min
+                                            .toStringAsFixed(1),
+                                        humidityLevel:
+                                            event.main.humidity.toString(),
+                                        imageName: event.weather.first.icon,
+                                        time: event.dt.toStringHHMMFromEpoch(),
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }
