@@ -50,6 +50,27 @@ class _DetailPageState extends State<DetailPage> {
     }
   }
 
+  void _showErrorDialog({required String message}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('エラー'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // ダイアログを閉じる
+                Navigator.of(context).pop(); // 詳細画面を閉じる
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,9 +81,14 @@ class _DetailPageState extends State<DetailPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            final message =
+                snapshot.error.toString().replaceFirst('Exception: ', '');
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _showErrorDialog(message: message);
+            });
+            return Center(child: Text('エラー: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return const Center(child: Text('No data available'));
+            return const Center(child: Text('データがありません'));
           } else {
             final data = snapshot.data!;
             city = data.city.name;
