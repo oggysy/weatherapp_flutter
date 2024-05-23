@@ -1,12 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:weatherapp_flutter/presentation/pages/detail_page.dart';
 import 'package:weatherapp_flutter/presentation/pages/prefecture_select_page.dart';
 import 'package:weatherapp_flutter/service/location_service.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key, this.locationService = LocationService.instance});
 
   final LocationService locationService;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('位置情報が許可されていません'),
+          content: const Text('設定から許可を行ってください。'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await openAppSettings();
+              },
+              child: const Text('設定に移動'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +82,8 @@ class HomePage extends StatelessWidget {
             ),
             ElevatedButton.icon(
               onPressed: () async {
-                final position = await locationService.getCurrentLocation();
+                final position =
+                    await widget.locationService.getCurrentLocation();
                 if (!context.mounted) return;
 
                 if (position != null) {
