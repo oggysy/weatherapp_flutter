@@ -96,6 +96,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   );
+                } else {
+                  _showPermissionDeniedDialog();
                 }
               },
               icon: const Icon(Icons.near_me),

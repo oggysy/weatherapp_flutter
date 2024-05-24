@@ -26,15 +26,15 @@ class WeathreAPIService {
         _baseUrl,
         queryParameters: queryParameters,
       );
-      if (response.statusCode == 200) {
+      try {
         final data = WeatherResponse.fromJson(response.data);
         return data;
-      } else {
-        throw Exception('Failed to load weather data');
+      } catch (e) {
+        throw Exception('デコード失敗しました');
       }
-    } catch (e) {
-      print(e.toString());
-      throw Exception('Error fetching weather data: $e');
+    } on DioException catch (dioException) {
+      final message = _handleErrorMessage(dioException);
+      throw Exception(message);
     }
   }
 
@@ -45,5 +45,29 @@ class WeathreAPIService {
   Future<WeatherResponse> fetchWeatherFromLocation(
       {required double lat, required double lon}) {
     return _fetchWeatherData({'lat': lat, 'lon': lon});
+  }
+
+  String _handleErrorMessage(DioException dioException) {
+    if (dioException.type == DioExceptionType.connectionTimeout ||
+        dioException.type == DioExceptionType.sendTimeout ||
+        dioException.type == DioExceptionType.receiveTimeout) {
+      return 'タイムアウトしました';
+    } else if (dioException.type == DioExceptionType.badResponse) {
+      final statusCode = dioException.response?.statusCode;
+      if (statusCode == null) {
+        return '不明なエラー';
+      }
+      if (statusCode >= 400 && statusCode < 500) {
+        return 'クライエントエラー';
+      } else if (statusCode >= 500 && statusCode < 600) {
+        return 'サーバーエラー';
+      } else {
+        return '不明なエラー';
+      }
+    } else if (dioException.type == DioExceptionType.unknown) {
+      return '不明なエラー';
+    } else {
+      return 'ネットワークに接続できませんでした。';
+    }
   }
 }
