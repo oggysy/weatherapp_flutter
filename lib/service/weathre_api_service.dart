@@ -53,13 +53,13 @@ class WeathreAPIService {
         dioException.type == DioExceptionType.receiveTimeout) {
       return 'タイムアウトしました';
     } else if (dioException.type == DioExceptionType.badResponse) {
-      if (dioException.response?.statusCode != null &&
-          dioException.response!.statusCode! >= 400 &&
-          dioException.response!.statusCode! < 500) {
+      final statusCode = dioException.response?.statusCode;
+      if (statusCode == null) {
+        return '不明なエラー';
+      }
+      if (statusCode >= 400 && statusCode < 500) {
         return 'クライエントエラー';
-      } else if (dioException.response?.statusCode != null &&
-          dioException.response!.statusCode! >= 500 &&
-          dioException.response!.statusCode! < 600) {
+      } else if (statusCode >= 500 && statusCode < 600) {
         return 'サーバーエラー';
       } else {
         return '不明なエラー';
