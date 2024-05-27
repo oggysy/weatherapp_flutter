@@ -4,6 +4,7 @@ import 'package:weatherapp_flutter/extension/date_time_extension.dart';
 import 'package:weatherapp_flutter/extension/weather_response_extension.dart';
 import 'package:weatherapp_flutter/extension/int_extension.dart';
 import 'package:weatherapp_flutter/model/weather_response_data_model.dart';
+import 'package:weatherapp_flutter/presentation/component/alert/normal_arlert_dialog.dart';
 import 'package:weatherapp_flutter/presentation/component/pop_chart.dart';
 import 'package:weatherapp_flutter/service/weathre_api_service.dart';
 
@@ -54,18 +55,9 @@ class _DetailPageState extends State<DetailPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('エラー'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // ダイアログを閉じる
-                Navigator.of(context).pop(); // 詳細画面を閉じる
-              },
-              child: const Text('OK'),
-            ),
-          ],
+        return NormalAlertDialog(
+          title: 'エラー',
+          message: message,
         );
       },
     );

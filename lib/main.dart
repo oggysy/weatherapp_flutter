@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp_flutter/presentation/pages/home_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   await dotenv.load(fileName: '.env');
+  tz.initializeTimeZones();
   runApp(const MyApp());
 }
 
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
